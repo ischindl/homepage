@@ -130,6 +130,76 @@ describe("components/services/group", () => {
     expect(found).toBeTruthy();
   });
 
+  it("renders custom data-* attributes from layout.data", () => {
+    const { container } = render(
+      <ServicesGroup
+        group={{ name: "Test", services: [], groups: [] }}
+        layout={{ data: { foo: "bar", baz: "qux" } }}
+        groupsInitiallyCollapsed={false}
+      />,
+    );
+
+    const groupDiv = container.querySelector('[data-group="Test"]');
+    expect(groupDiv).toHaveAttribute("data-foo", "bar");
+    expect(groupDiv).toHaveAttribute("data-baz", "qux");
+  });
+
+  it("does not add unexpected data-* attributes when layout.data is empty", () => {
+    const { container } = render(
+      <ServicesGroup
+        group={{ name: "Test", services: [], groups: [] }}
+        layout={{ data: {} }}
+        groupsInitiallyCollapsed={false}
+      />,
+    );
+
+    const groupDiv = container.querySelector('[data-group="Test"]');
+    // Should have data-group but not data-foo
+    expect(groupDiv).toHaveAttribute("data-group", "Test");
+    expect(groupDiv).not.toHaveAttribute("data-foo");
+  });
+
+  it("renders layout.class on the group wrapper", () => {
+    const { container } = render(
+      <ServicesGroup
+        group={{ name: "Test", services: [], groups: [] }}
+        layout={{ class: "my-custom-class" }}
+        groupsInitiallyCollapsed={false}
+      />,
+    );
+
+    const groupDiv = container.querySelector('[data-group="Test"]');
+    expect(groupDiv).toHaveClass("my-custom-class");
+  });
+
+  it("layout.class merges with default classes", () => {
+    const { container } = render(
+      <ServicesGroup
+        group={{ name: "Test", services: [], groups: [] }}
+        layout={{ class: "my-custom-class" }}
+        groupsInitiallyCollapsed={false}
+      />,
+    );
+
+    const groupDiv = container.querySelector('[data-group="Test"]');
+    expect(groupDiv).toHaveClass("services-group");
+    expect(groupDiv).toHaveClass("flex-1");
+    expect(groupDiv).toHaveClass("my-custom-class");
+  });
+
+  it("handles undefined layout without error", () => {
+    const { container } = render(
+      <ServicesGroup
+        group={{ name: "Test", services: [], groups: [] }}
+        groupsInitiallyCollapsed={false}
+      />,
+    );
+
+    const groupDiv = container.querySelector('[data-group="Test"]');
+    expect(groupDiv).toBeInTheDocument();
+    expect(groupDiv).toHaveClass("services-group");
+  });
+
   it("sets the panel height to 0 when initially collapsed", async () => {
     render(
       <ServicesGroup
