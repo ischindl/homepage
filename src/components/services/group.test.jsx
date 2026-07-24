@@ -70,6 +70,66 @@ describe("components/services/group", () => {
     expect(screen.getByText("Sub")).toBeInTheDocument();
   });
 
+  it("renders data-group attribute on the group wrapper div", () => {
+    const { container } = render(
+      <ServicesGroup
+        group={{ name: "My Services", services: [], groups: [] }}
+        layout={{}}
+        groupsInitiallyCollapsed={false}
+      />,
+    );
+
+    const groupDiv = container.querySelector('[data-group="My Services"]');
+    expect(groupDiv).toBeInTheDocument();
+    expect(groupDiv).toHaveClass("services-group");
+  });
+
+  it("renders data-group attribute on subgroups", () => {
+    const { container } = render(
+      <ServicesGroup
+        group={{
+          name: "Main",
+          services: [],
+          groups: [{ name: "SubGroup", services: [], groups: [] }],
+        }}
+        layout={{}}
+        groupsInitiallyCollapsed={false}
+      />,
+    );
+
+    const mainDiv = container.querySelector('[data-group="Main"]');
+    expect(mainDiv).toBeInTheDocument();
+    const subDiv = container.querySelector('[data-group="SubGroup"]');
+    expect(subDiv).toBeInTheDocument();
+  });
+
+  it("handles empty group name in data-group", () => {
+    const { container } = render(
+      <ServicesGroup
+        group={{ name: "", services: [], groups: [] }}
+        layout={{}}
+        groupsInitiallyCollapsed={false}
+      />,
+    );
+
+    const groupDiv = container.querySelector('[data-group=""]');
+    expect(groupDiv).toBeInTheDocument();
+  });
+
+  it("handles special characters in group name", () => {
+    const { container } = render(
+      <ServicesGroup
+        group={{ name: "Group & Co.", services: [], groups: [] }}
+        layout={{}}
+        groupsInitiallyCollapsed={false}
+      />,
+    );
+
+    const groupDivs = container.querySelectorAll(".services-group");
+    const found = Array.from(groupDivs).find((el) => el.getAttribute("data-group") === "Group & Co.");
+    expect(found).toBeTruthy();
+  });
+
   it("sets the panel height to 0 when initially collapsed", async () => {
     render(
       <ServicesGroup
