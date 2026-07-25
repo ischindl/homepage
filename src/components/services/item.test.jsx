@@ -343,4 +343,65 @@ describe("components/services/item", () => {
 
     expect(screen.queryByTestId("kubernetes-status")).not.toBeInTheDocument();
   });
+
+  it("renders empty data-name when service name is empty string", () => {
+    const { container } = renderWithProviders(
+      <Item
+        groupName="G"
+        useEqualHeights={false}
+        service={{
+          id: "s1",
+          name: "",
+          widgets: [],
+        }}
+      />,
+      { settings: { showStats: false, statusStyle: "basic" } },
+    );
+
+    const li = container.querySelector('[data-name=""]');
+    expect(li).toBeInTheDocument();
+    expect(li).toHaveAttribute("data-name", "");
+  });
+
+  it("service.class handles empty string gracefully", () => {
+    const { container } = renderWithProviders(
+      <Item
+        groupName="G"
+        useEqualHeights={false}
+        service={{
+          id: "s1",
+          name: "Test",
+          class: "",
+          widgets: [],
+        }}
+      />,
+      { settings: { showStats: false, statusStyle: "basic" } },
+    );
+
+    const li = container.querySelector('[data-name="Test"]');
+    expect(li).toBeInTheDocument();
+    expect(li).toHaveClass("service");
+    expect(li.className).not.toContain("undefined");
+  });
+
+  it("does not add custom data-* attributes when service.data is an empty object", () => {
+    const { container } = renderWithProviders(
+      <Item
+        groupName="G"
+        useEqualHeights={false}
+        service={{
+          id: "s1",
+          name: "Test",
+          data: {},
+          widgets: [],
+        }}
+      />,
+      { settings: { showStats: false, statusStyle: "basic" } },
+    );
+
+    const li = container.querySelector('[data-name="Test"]');
+    expect(li).toBeInTheDocument();
+    expect(li).toHaveAttribute("data-name", "Test");
+    expect(li).not.toHaveAttribute("data-foo");
+  });
 });
