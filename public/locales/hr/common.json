@@ -71,6 +71,15 @@
         "degraded": "Degradirano",
         "no_data": "Nema dostupnih podataka spremišta"
     },
+    "duplicati": {
+        "jobs": "Poslovi",
+        "stored": "Spremljeno",
+        "lastBackup": "Zadnje pokretanje",
+        "nextRun": "Sljedeće pokretanje",
+        "running": "Pokreće se",
+        "warnings": "Upozorenja",
+        "errors": "Greške"
+    },
     "docker": {
         "rx": "RX",
         "tx": "TX",
@@ -465,6 +474,11 @@
         "cpu": "CPU",
         "lxc": "Linux kontejner",
         "vms": "Virtualni uređaji"
+    },
+    "pulse": {
+        "nodes": "Čvorovi",
+        "vms": "VM-ovi",
+        "lxcs": "LXC-ovi"
     },
     "glances": {
         "cpu": "CPU",
@@ -1210,5 +1224,11 @@
         "burned": "Potrošeno",
         "remaining": "Preostalo",
         "steps": "Koraci"
+    },
+    "syncthing": {
+        "connected": "Povezano",
+        "synced": "Sinkronizirano",
+        "errors": "Greške",
+        "storage": "Spremište"
     }
 }
